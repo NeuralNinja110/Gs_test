@@ -139,6 +139,22 @@ Neptune is designed with a mobile-first approach, ensuring optimal performance a
 - Configurable refresh intervals
 - Fallback mechanisms for offline scenarios
 
+## ⚠️ Disclaimer
+
+The deployment of this project ([vectorinnovate.com](https://vectorinnovate.com)) has been performed through our **private repository**, which contains sensitive data such as:
+
+- API keys  
+- Security account token JSON files  
+- Other confidential configurations  
+
+As a result, we are unable to make that repository public. All commits and version history since the beginning of the project were maintained in the private repository.
+
+This repository serves as the **public version of the project**, stripped of all sensitive information.  
+You can still run the project locally by setting the necessary environment variables.
+
+Please refer to the `.env.example` file to configure your local environment.
+
+
 ## 📈 Future Enhancements
 
 - Machine learning integration for catch prediction and potential fishing zone
