@@ -1,0 +1,131 @@
+/* Theme styles for light and dark mode */
+
+:root {
+  /* Light theme variables */
+  --light-bg-primary: #f3f4f6;
+  --light-bg-secondary: #ffffff;
+  --light-text-primary: #111827;
+  --light-text-secondary: #4b5563;
+  --light-border: #e5e7eb;
+  --light-accent: #3b82f6;
+  --light-accent-hover: #2563eb;
+  --light-button-text: #ffffff;
+  --light-input-bg: #ffffff;
+  --light-shadow: rgba(0, 0, 0, 0.1);
+  
+  /* Dark theme variables */
+  --dark-bg-primary: #1f2937;
+  --dark-bg-secondary: #111827;
+  --dark-text-primary: #f9fafb;
+  --dark-text-secondary: #d1d5db;
+  --dark-border: #374151;
+  --dark-accent: #3b82f6;
+  --dark-accent-hover: #60a5fa;
+  --dark-button-text: #ffffff;
+  --dark-input-bg: #374151;
+  --dark-shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* Light theme (default) */
+.light-theme {
+  --bg-primary: var(--light-bg-primary);
+  --bg-secondary: var(--light-bg-secondary);
+  --text-primary: var(--light-text-primary);
+  --text-secondary: var(--light-text-secondary);
+  --border: var(--light-border);
+  --accent: var(--light-accent);
+  --accent-hover: var(--light-accent-hover);
+  --button-text: var(--light-button-text);
+  --input-bg: var(--light-input-bg);
+  --shadow: var(--light-shadow);
+}
+
+/* Dark theme */
+.dark-theme {
+  --bg-primary: var(--dark-bg-primary);
+  --bg-secondary: var(--dark-bg-secondary);
+  --text-primary: var(--dark-text-primary);
+  --text-secondary: var(--dark-text-secondary);
+  --border: var(--dark-border);
+  --accent: var(--dark-accent);
+  --accent-hover: var(--dark-accent-hover);
+  --button-text: var(--dark-button-text);
+  --input-bg: var(--dark-input-bg);
+  --shadow: var(--dark-shadow);
+}
+
+/* Apply theme variables to elements */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Apply theme to main container */
+.theme-bg {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Card and container styles */
+.theme-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 6px var(--shadow);
+}
+
+/* Button styles */
+.theme-button {
+  background-color: var(--accent);
+  color: var(--button-text);
+}
+
+.theme-button:hover {
+  background-color: var(--accent-hover);
+}
+
+/* Input styles */
+.theme-input {
+  background-color: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+/* Text styles */
+.theme-text-primary {
+  color: var(--text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--accent);
+  color: var(--button-text);
+}
+
+/* Shadow styles for buttons */
+.shadow-light {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-dark {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
