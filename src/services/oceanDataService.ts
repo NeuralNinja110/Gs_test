@@ -2,10 +2,16 @@ import { OceanCurrentData, BiogeochemicalData, TemperatureData, ProcessedData, W
 import { fetchWindData } from './windDataService';
 import { API_BASE_URL, API_ENDPOINTS, CACHE_CONFIG } from '../config';
 
-// Interface for alert image data
-export interface AlertImageData {
-  url: string;
-  name: string;
+// Interface for alert bulletin data
+export interface AlertBulletin {
+  id: number;
+  english: string;
+  tamil: string;
+  image: string;
+}
+
+export interface AlertBulletinResponse {
+  bulletins: AlertBulletin[];
 }
 
 // Cache object to store data and last fetch date
@@ -86,17 +92,21 @@ const processData = (rawData: any[], type: 'currents' | 'oxygen' | 'temperature'
   return processedData;
 };
 
-export const fetchAlertImage = async (): Promise<AlertImageData> => {
+export const fetchAlertBulletins = async (): Promise<AlertBulletin[]> => {
   try {
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.ALERT_IMAGE}`);
     
     if (!response.ok) {
-      throw new Error('Failed to fetch alert image');
+      throw new Error('Failed to fetch alert bulletins');
     }
     
-    return await response.json();
+    const data = await response.json();
+    return data.map((bulletin: AlertBulletin) => ({
+      ...bulletin,
+      image: `data:image/png;base64,${bulletin.image}` // Convert bytecode to data URL
+    }));
   } catch (error) {
-    console.error('Error fetching alert image:', error);
+    console.error('Error fetching alert bulletins:', error);
     throw error;
   }
 };
