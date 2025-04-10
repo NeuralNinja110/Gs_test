@@ -12,7 +12,7 @@ app.use(cors());
 
 // Initialize BigQuery with credentials
 const bigquery = new BigQuery({
-  keyFilename: path.join(__dirname, '..', 'ocean-data-e68c2-b53062a9fb64.json'),
+  keyFilename: path.join(__dirname, 'ocean-data-e68c2-b53062a9fb64.json'),
   projectId: 'ocean-data-e68c2'
 });
 
