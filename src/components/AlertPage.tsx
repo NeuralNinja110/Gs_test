@@ -5,12 +5,14 @@ import ReactMarkdown from 'react-markdown';
 import { useLanguage } from '../context/LanguageContext';
 import LanguageSelector from './LanguageSelector';
 import { Dialog } from '@headlessui/react';
+import { Switch } from '@headlessui/react';
 
 const AlertPage: React.FC = () => {
   const [bulletins, setBulletins] = useState<AlertBulletin[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedBulletin, setSelectedBulletin] = useState<AlertBulletin | null>(null);
+  const [showEnglish, setShowEnglish] = useState(true);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -35,8 +37,29 @@ const AlertPage: React.FC = () => {
       <SemiCircleDial />
       <div className="max-w-4xl mx-auto theme-card rounded-lg shadow-lg overflow-hidden">
         <div className="bg-red-600 p-6">
-          <h1 className="text-3xl font-bold text-white">{t('alert.title')}</h1>
-          <p className="text-white mt-2 opacity-80">{t('alert.subtitle')}</p>
+          <div className="flex flex-col items-center gap-4">
+            <div className="text-center">
+              <h1 className="text-3xl font-bold text-white">{t('alert.title')}</h1>
+              <p className="text-white mt-2 opacity-80">{t('alert.subtitle')}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center gap-3">
+                <span className="text-white">{showEnglish ? 'English' : 'தமிழ்'}</span>
+                <Switch
+                  checked={showEnglish}
+                  onChange={setShowEnglish}
+                  className={`${showEnglish ? 'bg-blue-600' : 'bg-green-600'}
+                    relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
+                >
+                  <span className="sr-only">Toggle language</span>
+                  <span
+                    className={`${showEnglish ? 'translate-x-6' : 'translate-x-1'}
+                      inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                  />
+                </Switch>
+              </div>
+            </div>
+          </div>
         </div>
         
         <div className="p-6">
@@ -59,12 +82,8 @@ const AlertPage: React.FC = () => {
                       <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-4">
                           <div className="prose dark:prose-invert max-w-none">
-                            <h4 className="text-lg font-semibold mb-2">{t('alert.english')}</h4>
-                            <ReactMarkdown>{bulletin.english}</ReactMarkdown>
-                          </div>
-                          <div className="prose dark:prose-invert max-w-none">
-                            <h4 className="text-lg font-semibold mb-2">{t('alert.tamil')}</h4>
-                            <ReactMarkdown>{bulletin.tamil}</ReactMarkdown>
+                            <h4 className="text-lg font-semibold mb-2">{showEnglish ? t('English Summary') : t('தமிழில் விளக்கம்')}</h4>
+                            <ReactMarkdown>{showEnglish ? bulletin.english : bulletin.tamil}</ReactMarkdown>
                           </div>
                         </div>
                         <div className="flex flex-col items-center justify-center">
