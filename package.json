@@ -13,7 +13,9 @@
   "dependencies": {
     "@google-cloud/bigquery": "^7.9.3",
     "@google/generative-ai": "^0.24.0",
+    "@headlessui/react": "^2.2.1",
     "@react-google-maps/api": "^2.20.6",
+    "@react-pdf/renderer": "^4.3.0",
     "@types/leaflet": "^1.9.8",
     "@types/papaparse": "^5.3.14",
     "axios": "^1.8.4",
@@ -31,6 +33,7 @@
     "react-icons": "^5.5.0",
     "react-leaflet": "^4.2.1",
     "react-markdown": "^10.1.0",
+    "react-pdf": "^9.2.1",
     "react-router-dom": "^6.30.0"
   },
   "devDependencies": {
