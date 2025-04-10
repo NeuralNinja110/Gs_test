@@ -63,9 +63,10 @@ Neptune is a sophisticated fishing assistance application designed to provide co
 2. Copy `.env.example` to `.env`
 3. Configure the following environment variables:
    ```
+    VITE_API_BASE_URL=https://your-api-url.com
     VITE_GEMINI_API_KEY=your-gemini-api-key
     VITE_GOOGLE_MAPS_API_KEY=your-google-maps-api-key
-
+    VITE_SERVICE_ACCOUNT_PATH=path-to-service-account.json
     VITE_FIREBASE_API_KEY=your-firebase-api-key
     VITE_FIREBASE_AUTH_DOMAIN=your-firebase-auth-domain
     VITE_FIREBASE_DATABASE_URL=your-firebase-database-url
@@ -124,6 +125,17 @@ npm start
 - `/api/wind-data` - Get wind pattern data
 - `/api/alert-image` - Fetch weather alert images
 
+## 📊 Data Sources
+
+- **Copernicus Marine Data Store** - Primary source for ocean data parameters
+- **Indian Meteorological Department Website** - Weather forecasting and alert data for fishermen
+- **Indian National Centre for Ocean Information Services** - Potential Fishing Zone predictions
+
+## 🚀 Deployment
+
+- **Backend** - Deployed on Google Cloud Run for scalable containerized services
+- **Frontend** - Hosted on Vercel for optimal performance and continuous deployment
+
 ## 📱 Mobile Responsiveness
 
 Neptune is designed with a mobile-first approach, ensuring optimal performance and usability across all devices:
@@ -154,7 +166,6 @@ You can still run the project locally by setting the necessary environment varia
 
 Please refer to the `.env.example` file to configure your local environment.
 
-
 ## 📈 Future Enhancements
 
 - Machine learning integration for catch prediction and potential fishing zone
@@ -166,4 +177,3 @@ Please refer to the `.env.example` file to configure your local environment.
 - Integration with external data sources
 - User customization options and feedback system
 - Integration with Live weather forecasting services
-
