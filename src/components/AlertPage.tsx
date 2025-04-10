@@ -1,28 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import SemiCircleDial from './SemiCircleDial';
-import { fetchAlertImage, AlertImageData } from '../services/oceanDataService';
+import { fetchAlertBulletins, AlertBulletin } from '../services/oceanDataService';
 import ReactMarkdown from 'react-markdown';
 import { useLanguage } from '../context/LanguageContext';
 import LanguageSelector from './LanguageSelector';
+import { Dialog } from '@headlessui/react';
 
 const AlertPage: React.FC = () => {
-  const [alertImage, setAlertImage] = useState<AlertImageData | null>(null);
+  const [bulletins, setBulletins] = useState<AlertBulletin[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [selectedBulletin, setSelectedBulletin] = useState<AlertBulletin | null>(null);
   const { t } = useLanguage();
-  
-  // Fishermen warning images from IMD
-  const warningImages = [
-    "https://mausam.imd.gov.in/backend/assets/pdf_to_img_acwcc/1_fishermen_67f26d4d09ebe.png",
-    "https://mausam.imd.gov.in/backend/assets/pdf_to_img_acwcc/2_fishermen_67f26d4e5fc21.png",
-    "https://mausam.imd.gov.in/backend/assets/pdf_to_img_acwcc/3_fishermen_67f26d5134154.png"
-  ];
 
   useEffect(() => {
-    const getAlertImage = async () => {
+    const getAlertBulletins = async () => {
       try {
-        const data = await fetchAlertImage();
-        setAlertImage(data);
+        const data = await fetchAlertBulletins();
+        setBulletins(data);
       } catch (err) {
         setError(t('alert.error'));
         console.error(err);
@@ -31,7 +26,7 @@ const AlertPage: React.FC = () => {
       }
     };
 
-    getAlertImage();
+    getAlertBulletins();
   }, []);
 
   return (
@@ -54,46 +49,73 @@ const AlertPage: React.FC = () => {
             <div className="text-center text-red-500 py-12">
               <p className="text-xl font-semibold">{error}</p>
             </div>
-          ) : alertImage ? (
+          ) : bulletins.length > 0 ? (
             <div className="flex flex-col items-center">
-              <div className="mb-6 max-w-full overflow-hidden">
-                <img 
-                  src={alertImage.url} 
-                  alt={alertImage.name || t('alert.weather_warning')} 
-                  className="max-w-full h-auto rounded-lg shadow-md"
-                />
-              </div>
-              <div className="mt-4 w-full">
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4">
-                  <div className="prose dark:prose-invert max-w-none">
-                    <ReactMarkdown>
-                      {alertImage.name || t('alert.weather_alert')}
-                    </ReactMarkdown>
-                  </div>
-                </div>
-                <p className="theme-text-secondary text-center">
-                  {t('alert.safety_notice')}
-                </p>
-              </div>
-              
               <div className="mt-8 w-full">
                 <h3 className="text-xl font-semibold theme-text-primary mb-4 text-center">{t('alert.bulletins')}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {warningImages.map((imageUrl, index) => (
-                    <div key={index} className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                      <img 
-                        src={imageUrl} 
-                        alt={`${t('alert.bulletin')} ${index + 1}`} 
-                        className="w-full h-auto"
-                        loading="lazy"
-                      />
-                      <div className="p-3 bg-gray-50 dark:bg-gray-800">
-                        <p className="text-sm theme-text-secondary text-center">{t('alert.bulletin')} {index + 1}</p>
+                <div className="grid grid-cols-1 gap-8">
+                  {bulletins.map((bulletin) => (
+                    <div key={`${bulletin.id}-${bulletin.time || bulletin.english?.substring(0, 20)}`} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                          <div className="prose dark:prose-invert max-w-none">
+                            <h4 className="text-lg font-semibold mb-2">{t('alert.english')}</h4>
+                            <ReactMarkdown>{bulletin.english}</ReactMarkdown>
+                          </div>
+                          <div className="prose dark:prose-invert max-w-none">
+                            <h4 className="text-lg font-semibold mb-2">{t('alert.tamil')}</h4>
+                            <ReactMarkdown>{bulletin.tamil}</ReactMarkdown>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-center justify-center">
+                          <img
+                            src={bulletin.image}
+                            alt={`${t('alert.bulletin')} ${bulletin.id}`}
+                            className="max-w-full h-auto rounded-lg shadow-md cursor-pointer hover:opacity-90 transition-opacity"
+                            onClick={() => setSelectedBulletin(bulletin)}
+                          />
+                          <p className="mt-2 text-sm theme-text-secondary text-center">
+                            {t('alert.click_to_enlarge')}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
+
+              {/* Image Modal */}
+              <Dialog
+                open={selectedBulletin !== null}
+                onClose={() => setSelectedBulletin(null)}
+                className="relative z-50"
+              >
+                <div className="fixed inset-0 bg-black/75" aria-hidden="true" />
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4">
+                    <Dialog.Panel className="relative bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full p-6 shadow-xl">
+                      {selectedBulletin && (
+                        <div className="space-y-4">
+                          <img
+                            src={selectedBulletin.image}
+                            alt={`${t('alert.bulletin')} ${selectedBulletin.id}`}
+                            className="w-full h-auto rounded-lg"
+                          />
+                          <button
+                            onClick={() => setSelectedBulletin(null)}
+                            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                          >
+                            <span className="sr-only">{t('alert.close')}</span>
+                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      )}
+                    </Dialog.Panel>
+                  </div>
+                </div>
+              </Dialog>
             </div>
           ) : (
             <div className="text-center text-gray-500 py-12">
