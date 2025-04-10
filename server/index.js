@@ -154,8 +154,8 @@ app.get('/api/wind-data', async (req, res) => {
 
 app.get('/api/alert-image', async (req, res) => {
   try {
-    console.log('Fetching alert image URL...');
-    const query = 'SELECT * FROM `ocean-data-e68c2.ocean_data.link`';
+    console.log('Fetching alert bulletins...');
+    const query = 'SELECT id, english, tamil, image FROM `ocean-data-e68c2.ocean_data.link`';
     const options = {
       query: query,
       location: 'US'
@@ -163,12 +163,18 @@ app.get('/api/alert-image', async (req, res) => {
 
     const [rows] = await bigquery.query(options);
     
-    if (rows && rows.length > 0 && rows[0].url) {
-      console.log('Fetched alert image URL successfully');
-      res.json({ url: rows[0].url, name: rows[0].name });
+    if (rows && rows.length > 0) {
+      console.log(`Fetched ${rows.length} alert bulletins successfully`);
+      const bulletins = rows.map(row => ({
+        id: row.id,
+        english: row.english,
+        tamil: row.tamil,
+        image: row.image
+      }));
+      res.json(bulletins);
     } else {
-      console.error('No alert image URL found');
-      res.status(404).json({ error: 'No alert image URL found' });
+      console.error('No alert bulletins found');
+      res.status(404).json({ error: 'No alert bulletins found' });
     }
   } catch (error) {
     console.error('Error fetching alert image URL:', error);
